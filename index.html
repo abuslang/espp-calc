@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palo Alto Networks ESPP Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Palo Alto Networks ESPP Calculator</h1>
+            <p>Calculate your potential ESPP gains based on your enrollment date</p>
+        </header>
+
+        <main>
+            <div class="calculator-card">
+                <div class="input-section">
+                    <h2>Your Information</h2>
+                    <div class="form-group">
+                        <label for="joinDate">Date you joined Palo Alto Networks:</label>
+                        <input type="date" id="joinDate" name="joinDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="contributionPercent">Contribution percentage (1-15%):</label>
+                        <input type="number" id="contributionPercent" name="contributionPercent" min="1" max="15" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary">Annual salary (USD):</label>
+                        <input type="number" id="salary" name="salary" placeholder="Enter your annual salary">
+                    </div>
+                    <div class="stock-prices">
+                        <h3>Stock Prices</h3>
+                        <div class="form-group">
+                            <label for="offeringPrice">Stock price at offering start (USD):</label>
+                            <input type="number" id="offeringPrice" name="offeringPrice" step="0.01" placeholder="Enter stock price at offering start">
+                        </div>
+                        <div class="form-group">
+                            <label for="purchasePrice">Current/Expected stock price at purchase (USD):</label>
+                            <input type="number" id="purchasePrice" name="purchasePrice" step="0.01" placeholder="Enter expected stock price at purchase">
+                        </div>
+                    </div>
+                    <button id="calculateBtn">Calculate</button>
+                </div>
+
+                <div class="results-section">
+                    <h2>ESPP Results</h2>
+                    <div id="nextOfferingPeriod" class="result-item">
+                        <span class="label">Next offering period:</span>
+                        <span class="value" id="nextOfferingValue">-</span>
+                    </div>
+                    <div id="purchaseDate" class="result-item">
+                        <span class="label">Purchase date:</span>
+                        <span class="value" id="purchaseDateValue">-</span>
+                    </div>
+                    <div id="lookbackPrice" class="result-item">
+                        <span class="label">Lookback price:</span>
+                        <span class="value" id="lookbackPriceValue">-</span>
+                    </div>
+                    <div id="currentPrice" class="result-item">
+                        <span class="label">Current stock price:</span>
+                        <span class="value" id="currentPriceValue">-</span>
+                    </div>
+                    <div id="purchasePrice" class="result-item">
+                        <span class="label">Purchase price (15% discount):</span>
+                        <span class="value" id="purchasePriceValue">-</span>
+                    </div>
+                    <div id="contribution" class="result-item">
+                        <span class="label">Your contribution:</span>
+                        <span class="value" id="contributionValue">-</span>
+                    </div>
+                    <div id="sharesReceived" class="result-item">
+                        <span class="label">Shares received:</span>
+                        <span class="value" id="sharesReceivedValue">-</span>
+                    </div>
+                    <div id="marketValue" class="result-item">
+                        <span class="label">Market value:</span>
+                        <span class="value" id="marketValueValue">-</span>
+                    </div>
+                    <div id="potentialGain" class="result-item highlight">
+                        <span class="label">Potential gain:</span>
+                        <span class="value" id="potentialGainValue">-</span>
+                    </div>
+                    <div id="percentageReturn" class="result-item highlight">
+                        <span class="label">Return on investment:</span>
+                        <span class="value" id="percentageReturnValue">-</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Disclaimer: This calculator provides estimates only. Actual results may vary based on stock price fluctuations and company policy changes.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

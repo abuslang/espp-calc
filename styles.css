@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+header h1 {
+    color: #0d47a1;
+    margin-bottom: 10px;
+}
+
+.calculator-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+    .calculator-card {
+        flex-direction: row;
+    }
+}
+
+.input-section, .results-section {
+    padding: 25px;
+}
+
+.input-section {
+    background-color: #f9fafc;
+    flex: 1;
+}
+
+.results-section {
+    flex: 1;
+    background-color: white;
+    border-top: 1px solid #e1e4e8;
+}
+
+@media (min-width: 768px) {
+    .results-section {
+        border-top: none;
+        border-left: 1px solid #e1e4e8;
+    }
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #0d47a1;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+input[type="date"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #0d47a1;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0a3880;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.result-item .label {
+    font-weight: 500;
+}
+
+.result-item .value {
+    font-weight: 600;
+}
+
+.highlight {
+    background-color: #e3f2fd;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: none;
+}
+
+.highlight .label {
+    color: #0d47a1;
+}
+
+.highlight .value {
+    color: #0d47a1;
+    font-size: 1.1rem;
+}
+
+footer {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    padding: 20px 0;
+}
+
+.stock-prices {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e4e8;
+}
+
+.stock-prices h3 {
+    color: #0d47a1;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+} 
