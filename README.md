@@ -3,7 +3,7 @@
 A simple web application to calculate potential gains from Palo Alto Networks' Employee Stock Purchase Plan (ESPP).
 
 ## Live Demo
-Visit the calculator at: [YOUR_GITHUB_USERNAME.github.io/espp-calc](https://YOUR_GITHUB_USERNAME.github.io/espp-calc)
+Visit the calculator at: [abuslang.github.io/espp-calc](https://abuslang.github.io/espp-calc)
 
 ## Features
 
@@ -33,7 +33,7 @@ To run this calculator locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/espp-calc.git
+   git clone https://github.com/abuslang/espp-calc.git
    ```
 
 2. Open `index.html` in your web browser
@@ -50,7 +50,7 @@ This site is hosted using GitHub Pages. To deploy your own version:
 4. Set the folder to `/ (root)`
 5. Click Save
 
-Your site will be available at `https://YOUR_GITHUB_USERNAME.github.io/espp-calc`
+Your site will be available at `https://abuslang.github.io/espp-calc`
 
 ## Overview
 
