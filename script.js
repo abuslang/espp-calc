@@ -3,9 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const joinDateInput = document.getElementById('joinDate');
     const contributionPercentInput = document.getElementById('contributionPercent');
     const salaryInput = document.getElementById('salary');
+    const paycheckContributionInput = document.getElementById('paycheckContribution');
     const offeringPriceInput = document.getElementById('offeringPrice');
     const purchasePriceInput = document.getElementById('purchasePrice');
     const calculateBtn = document.getElementById('calculateBtn');
+    const contributionModeToggle = document.getElementById('contributionMode');
+    const percentageModeDiv = document.getElementById('percentageMode');
+    const paycheckModeDiv = document.getElementById('paycheckMode');
     
     // Result elements
     const nextOfferingValue = document.getElementById('nextOfferingValue');
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners
     joinDateInput.addEventListener('change', updateOfferingPeriod);
     calculateBtn.addEventListener('click', calculateESPP);
+    contributionModeToggle.addEventListener('change', toggleContributionMode);
 
     // Function to format dates
     function formatDate(date) {
@@ -103,6 +108,16 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    // Function to create a clickable date link
+    function createDateLink(date) {
+        const formattedDate = formatDate(date);
+        const investorUrl = 'https://investors.paloaltonetworks.com/stock-information/historical-price-lookup';
+        return `<span class="date-link" 
+            onclick="window.open('${investorUrl}', '_blank')" 
+            title="Click to look up PANW stock price for ${formattedDate} on Palo Alto Networks Investor Relations site"
+            >${formattedDate}</span>`;
+    }
+
     // Function to determine and display next offering period
     function updateOfferingPeriod() {
         const joinDate = new Date(joinDateInput.value);
@@ -114,33 +129,77 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the offering period display
         nextOfferingValue.textContent = `${formatDate(period.start)} to ${formatDate(period.end)}`;
 
-        // Update the stock price input labels
-        offeringPriceLabel.textContent = `Stock price at offering start (USD) (${formatDate(period.start)}):`;
-        purchasePriceLabel.textContent = `Expected stock price at purchase (USD) (${formatDate(period.purchaseDates[0])}):`;
+        // Update the stock price input labels with clickable dates
+        offeringPriceLabel.innerHTML = `Stock price at offering start (USD) (${createDateLink(period.start)}):`;
+        purchasePriceLabel.innerHTML = `Expected stock price at purchase (USD) (${createDateLink(period.purchaseDates[0])}):`;
     }
     
+    // Function to toggle between contribution modes
+    function toggleContributionMode() {
+        if (contributionModeToggle.checked) {
+            percentageModeDiv.classList.add('hidden');
+            paycheckModeDiv.classList.remove('hidden');
+            // If percentage mode has values, calculate and set paycheck amount
+            if (salaryInput.value && contributionPercentInput.value) {
+                const annualSalary = parseFloat(salaryInput.value);
+                const percentage = parseFloat(contributionPercentInput.value);
+                const paycheckAmount = (annualSalary * (percentage / 100)) / 24;
+                paycheckContributionInput.value = paycheckAmount.toFixed(2);
+            }
+        } else {
+            percentageModeDiv.classList.remove('hidden');
+            paycheckModeDiv.classList.add('hidden');
+            // If paycheck amount is set, calculate and set percentage
+            if (paycheckContributionInput.value) {
+                const paycheckAmount = parseFloat(paycheckContributionInput.value);
+                const annualContribution = paycheckAmount * 24;
+                if (salaryInput.value) {
+                    const percentage = (annualContribution / parseFloat(salaryInput.value)) * 100;
+                    contributionPercentInput.value = Math.min(15, Math.max(1, percentage)).toFixed(1);
+                }
+            }
+        }
+    }
+
     // Function to calculate ESPP benefits
     function calculateESPP() {
         // Get input values
         const joinDate = new Date(joinDateInput.value);
-        const contributionPercent = parseFloat(contributionPercentInput.value);
-        const annualSalary = parseFloat(salaryInput.value);
+        let contributionAmount;
+        
+        if (contributionModeToggle.checked) {
+            // Per-paycheck mode
+            const paycheckAmount = parseFloat(paycheckContributionInput.value);
+            if (isNaN(paycheckAmount) || paycheckAmount <= 0) {
+                alert('Please enter a valid paycheck contribution amount');
+                return;
+            }
+            contributionAmount = paycheckAmount * 12; // 6 months = 12 paychecks
+        } else {
+            // Percentage mode
+            const contributionPercent = parseFloat(contributionPercentInput.value);
+            const annualSalary = parseFloat(salaryInput.value);
+            
+            if (isNaN(contributionPercent) || contributionPercent < 1 || contributionPercent > 15) {
+                alert('Contribution percentage must be between 1% and 15%');
+                return;
+            }
+            
+            if (isNaN(annualSalary) || annualSalary <= 0) {
+                alert('Please enter a valid annual salary');
+                return;
+            }
+            
+            const sixMonthSalary = annualSalary / 2;
+            contributionAmount = sixMonthSalary * (contributionPercent / 100);
+        }
+        
         const offeringPrice = parseFloat(offeringPriceInput.value);
         const expectedPurchasePrice = parseFloat(purchasePriceInput.value);
         
-        // Validate inputs
+        // Validate remaining inputs
         if (isNaN(joinDate.getTime())) {
             alert('Please enter a valid join date');
-            return;
-        }
-        
-        if (isNaN(contributionPercent) || contributionPercent < 1 || contributionPercent > 15) {
-            alert('Contribution percentage must be between 1% and 15%');
-            return;
-        }
-        
-        if (isNaN(annualSalary) || annualSalary <= 0) {
-            alert('Please enter a valid annual salary');
             return;
         }
 
@@ -162,9 +221,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calculate ESPP details
         const esppDetails = calculateESPPDetails(
-            joinDate, 
-            contributionPercent, 
-            annualSalary, 
+            joinDate,
+            contributionAmount,
             offeringPrice,
             expectedPurchasePrice,
             period
@@ -174,15 +232,11 @@ document.addEventListener('DOMContentLoaded', function() {
         displayResults(esppDetails);
     }
     
-    // Function to calculate ESPP details based on join date
-    function calculateESPPDetails(joinDate, contributionPercent, annualSalary, offeringPrice, currentPrice, period) {
+    // Update calculateESPPDetails to work with direct contribution amount
+    function calculateESPPDetails(joinDate, contributionAmount, offeringPrice, currentPrice, period) {
         // Calculate purchase price (15% discount off the lower of lookback or current price)
         const lowerPrice = Math.min(offeringPrice, currentPrice);
         const discountedPurchasePrice = lowerPrice * 0.85;
-        
-        // Calculate contribution amount (6-month period)
-        const sixMonthSalary = annualSalary / 2;
-        const contributionAmount = sixMonthSalary * (contributionPercent / 100);
         
         // Check $25,000 annual limit
         const annualLimit = 25000;
@@ -194,19 +248,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Apply annual limit if necessary
         if (sharesReceived > maxSharesPerYear) {
             sharesReceived = maxSharesPerYear;
+            contributionAmount = maxSharesPerYear * discountedPurchasePrice;
         }
         
         // Calculate market value of shares at current price
         const marketValue = sharesReceived * currentPrice;
         
-        // Calculate actual contribution based on shares received
-        const actualContribution = sharesReceived * discountedPurchasePrice;
-        
         // Calculate potential gain
-        const potentialGain = marketValue - actualContribution;
+        const potentialGain = marketValue - contributionAmount;
         
         // Calculate percentage return
-        const percentageReturn = (potentialGain / actualContribution) * 100;
+        const percentageReturn = (potentialGain / contributionAmount) * 100;
         
         return {
             nextOfferingPeriod: {
@@ -217,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
             lookbackPrice: offeringPrice,
             currentPrice: currentPrice,
             purchasePrice: discountedPurchasePrice,
-            contributionAmount: actualContribution,
+            contributionAmount: contributionAmount,
             sharesReceived: sharesReceived,
             marketValue: marketValue,
             potentialGain: potentialGain,

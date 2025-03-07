@@ -21,13 +21,31 @@
                         <label for="joinDate">Date you joined Palo Alto Networks:</label>
                         <input type="date" id="joinDate" name="joinDate">
                     </div>
-                    <div class="form-group">
-                        <label for="contributionPercent">Contribution percentage (1-15%):</label>
-                        <input type="number" id="contributionPercent" name="contributionPercent" min="1" max="15" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label for="salary">Annual salary (USD):</label>
-                        <input type="number" id="salary" name="salary" placeholder="Enter your annual salary">
+                    <div class="contribution-section">
+                        <div class="mode-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="contributionMode">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="mode-label">Switch to per-paycheck contribution</span>
+                        </div>
+                        <div id="percentageMode" class="contribution-mode">
+                            <div class="form-group">
+                                <label for="contributionPercent">Contribution percentage (1-15%):</label>
+                                <input type="number" id="contributionPercent" name="contributionPercent" min="1" max="15" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="salary">Annual salary (USD):</label>
+                                <input type="number" id="salary" name="salary" placeholder="Enter your annual salary">
+                            </div>
+                        </div>
+                        <div id="paycheckMode" class="contribution-mode hidden">
+                            <div class="form-group">
+                                <label for="paycheckContribution">Amount per paycheck (USD):</label>
+                                <input type="number" id="paycheckContribution" name="paycheckContribution" step="0.01" placeholder="Enter amount deducted per paycheck">
+                                <small class="help-text">Assumes 24 paychecks per year (twice monthly)</small>
+                            </div>
+                        </div>
                     </div>
                     <div class="stock-prices">
                         <h3>Stock Prices</h3>
